@@ -1,6 +1,7 @@
 const mysql = require("mysql");
-const passwordFile = require("./password.js")
+const passwordFile = require("./password.js");
 const inquirer = require("inquirer");
+const manager = require("./bamazonManager");
 
 const password = process.env.password;
 let forSaleData;
@@ -37,7 +38,7 @@ connection.connect(function (err) {
     })
     startInquirer();
 });
-
+console.log(manager.manager);
 function startInquirer() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
@@ -48,14 +49,14 @@ function startInquirer() {
             {
                 type: "list",
                 name: "who",
-                message: "Are you a customer or an employee?",
-                choices: ["customer", "employee"]
+                message: "Are you a customer, manager?",
+                choices: ["customer", "manager"]
             }
         ]).then(function (user) {
             if (user.who === "customer") {
-                customerWouldLikeToDO()
+                customerWouldLikeToDO();
             } else {
-                employeeWouldLikeToDo()
+                managerWouldLikeTodo();
             }
         })
     })
