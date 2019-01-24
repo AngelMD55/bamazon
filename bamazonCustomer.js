@@ -1,7 +1,7 @@
 const mysql = require("mysql");
 const passwordFile = require("./password.js");
 const inquirer = require("inquirer");
-const manager = require("./bamazonManager");
+const manager = require("./bamazonManager.js");
 
 const password = process.env.password;
 let forSaleData;
@@ -30,15 +30,15 @@ connection.connect(function (err) {
         if (err) throw err;
         forSaleData = res;
         // console.log(forSaleData)
-        forSaleData.forEach(e => {
+        // forSaleData.forEach(e => {
             // console.log(`Item#: ${e.id}  Item: ${e.product_name}  Price: ${e.price}
             // _____________________________________________________\n` )
-        })
+        // })
 
     })
     startInquirer();
 });
-console.log(manager.manager);
+
 function startInquirer() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
@@ -56,7 +56,7 @@ function startInquirer() {
             if (user.who === "customer") {
                 customerWouldLikeToDO();
             } else {
-                managerWouldLikeTodo();
+                manager.manager();
             }
         })
     })
