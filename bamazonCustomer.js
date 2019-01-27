@@ -31,8 +31,8 @@ connection.connect(function (err) {
         forSaleData = res;
         // console.log(forSaleData)
         // forSaleData.forEach(e => {
-            // console.log(`Item#: ${e.id}  Item: ${e.product_name}  Price: ${e.price}
-            // _____________________________________________________\n` )
+        // console.log(`Item#: ${e.id}  Item: ${e.product_name}  Price: ${e.price}
+        // _____________________________________________________\n` )
         // })
 
     })
@@ -68,22 +68,20 @@ function customerWouldLikeToDO() {
             type: "list",
             name: "todo",
             message: "What would you like to do?",
-            choices: ["Browse", "Buy", "Purchase History", "Sign Out"]
+            choices: ["Browse", "Buy", "Sign Out"]
         }
     ]).then(function (user) {
         if (user.todo === "Browse") {
             browse();
         } else if (user.todo === "Buy") {
             buy();
-        } else if (user.todo === "Purchase History") {
-            purchaseHistory();
         } else if (user.todo === "Sign Out") {
-            signOut();
+            signOutN();
         }
     })
 }
 
-function signOut() {
+let signOutN = function signOut() {
     connection.end();
 }
 
@@ -96,7 +94,7 @@ function browse() {
             // console.log(forSaleData)
             forSaleData.forEach(e => {
                 console.log(`Item#: ${e.id}  Item: ${e.product_name}  Price: ${e.price}
-                _____________________________________________________\n` )
+_____________________________________________________\n` )
             })
             customerWouldLikeToDO()
         });
@@ -137,7 +135,8 @@ _____________________________________________________\n` )
                                 {
                                     type: "input",
                                     name: "howmany",
-                                    message: "How many of this items would you like to buy?"
+                                    message: "How many of this items would you like to buy?",
+                                    validate: numValidation
                                 }
                             ]).then(function (user) {
                                 howmany = user.howmany;
@@ -189,24 +188,35 @@ function purchaseReduceInventory() {
 
     )
     console.log(`${itemname} New Quantity: ${newInventory}\n`);
-        inquirer.prompt([
-            {
-                type: "list",
-                name: "afterPurchase",
-                message: "Would you like to keep shoping?",
-                choices: ["no", "yes"]
-            }
-        ]).then(function(user){
-            if (user.afterPurchase === "no"){
-                console.log("\nThank you for shoping with us have a great day")
-                signOut();
-            }else {
-                customerWouldLikeToDO();
-            }
-        })
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "afterPurchase",
+            message: "Would you like to keep shoping?",
+            choices: ["no", "yes"]
+        }
+    ]).then(function (user) {
+        if (user.afterPurchase === "no") {
+            console.log("\nThank you for shoping with us have a great day")
+            signOutN();
+        } else {
+            customerWouldLikeToDO();
+        }
+    })
 }
 
-
-function purchaseHistory() {
-    console.log("under construction")
-}
+let numValidation = function (input) {
+    // Declare function as asynchronous, and save the done callback
+    var done = this.async();
+    let temp = parseInt(input);
+    // Do async stuff
+    setTimeout(function() {
+      if (isNaN(temp)) {
+        // Pass the return value in the done callback
+        done('You need to provide a number');
+        return;
+      }
+      // Pass the return value in the done callback
+      done(null, true);
+    }, 500);
+  }
